@@ -47,10 +47,28 @@ functions:
       - httpApi:
           path: /notes/{id}
           method: put
-          
+
   deleteNotes:
     handler: 2-backend/endpoints/deleteNotes/index.handler
     events:
       - httpApi:
           path: /delete/{id}
           method: delete
+
+resources:
+  Resources:
+    ShuiNotesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ShuiNotesTable
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S # S står String som i datatyp
+          - AttributeName: sk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH # HASH = Partition key
+          - AttributeName: sk
+            KeyType: RANGE # RANGE = Sort key
+        BillingMode: PAY_PER_REQUEST
