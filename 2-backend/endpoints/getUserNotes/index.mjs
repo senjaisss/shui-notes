@@ -22,10 +22,10 @@ export const handler = async (event) => {
         const data = await client.send(command);
 
         const notes = (data.Items || []).map(item => ({
-            id: item.id.S,
-            username: item.username.S,
-            text: item.text.S,
-            createdAt: item.createdAt.S
+            id: item.id?.S || '',
+            username: item.username?.S || '',
+            text: item.text?.S || '',
+            createdAt: item.createdAt?.S || '',
         }));
 
         return sendResponse(200, {
