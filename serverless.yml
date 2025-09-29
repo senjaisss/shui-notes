@@ -1,0 +1,56 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: fe24d
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: shui-notes
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: shui-notes
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: eu-north-1
+  iam:
+    role: arn:aws:iam::533284742937:role/swing
+
+build:
+  esbuild:
+    minify: true
+
+package:
+  individually: true
+
+functions:
+  postNotes:
+    handler: 2-backend/endpoints/postNotes/index.handler
+    events:
+      - httpApi:
+          path: /postnote
+          method: post
+
+  getNotes:
+    handler: 2-backend/endpoints/getNotes/index.handler
+    events:
+      - httpApi:
+          path: /allnotes
+          method: get
+
+  getUserNotes:
+    handler: 2-backend/endpoints/getUserNotes/index.handler
+    events:
+      - httpApi:
+          path: /notes/{username}
+          method: get
+
+  updateNotes:
+    handler: 2-backend/endpoints/updateNotes/index.handler
+    events:
+      - httpApi:
+          path: /notes/{id}
+          method: put
+          
+  deleteNotes:
+    handler: 2-backend/endpoints/deleteNotes/index.handler
+    events:
+      - httpApi:
+          path: /delete/{id}
+          method: delete
