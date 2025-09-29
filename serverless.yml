@@ -45,7 +45,7 @@ functions:
     handler: 2-backend/endpoints/updateNotes/index.handler
     events:
       - httpApi:
-          path: /notes/{id}
+          path: /notes/{username}/{id}
           method: put
 
   deleteNotes:
