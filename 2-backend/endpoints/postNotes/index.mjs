@@ -2,14 +2,16 @@ import { v4 as uuidv4 } from 'uuid';
 import { PutItemCommand } from '@aws-sdk/client-dynamodb';
 import { client } from '../../services/utils/db.mjs';
 import { sendResponse } from '../../services/utils/response.js';
+import { validateNote } from '../../services/middleware/validateNote.js';
 
 export const handler = async (event) => {
     console.log("Event body:", event.body);
     try {
         const note = JSON.parse(event.body);
 
-        if (!note.username || !note.text) {
-            return sendResponse(400, { success: false, message: 'username and text are required' });
+        const validationResult = validateNote(note);
+        if (!validationResult.valid) {
+            return sendResponse(400, { success: false, message: validationResult.message });
         }
 
         const id_unsorted = uuidv4();
@@ -17,10 +19,10 @@ export const handler = async (event) => {
         const createdAt = new Date().toISOString();
 
         const command = new PutItemCommand({
-            TableName: "ShuiNotesTable",
+            TableName: "ShuiNotesTable2",
             Item: {
                 pk: { S: note.username },
-                sk: { S: createdAt },
+                sk: { S: id },
                 id: { S: id },
                 username: { S: note.username },
                 text: { S: note.text },

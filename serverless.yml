@@ -57,10 +57,10 @@ functions:
 
 resources:
   Resources:
-    ShuiNotesTable:
+    ShuiNotesTable2:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ShuiNotesTable
+        TableName: ShuiNotesTable2
         AttributeDefinitions:
           - AttributeName: pk
             AttributeType: S # S står String som i datatyp
