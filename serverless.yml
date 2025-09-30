@@ -52,7 +52,7 @@ functions:
     handler: 2-backend/endpoints/deleteNotes/index.handler
     events:
       - httpApi:
-          path: /delete/{id}
+          path: /notes/{username}/{id}
           method: delete
 
 resources:
