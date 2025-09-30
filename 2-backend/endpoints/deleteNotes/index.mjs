@@ -11,7 +11,7 @@ export const handler = async (event) => {
             TableName: "ShuiNotesTable",
             Key: {
                 pk: { S: username },
-                sk: { S: id }
+                sk: { S: createdAt }
             }
         };
 
