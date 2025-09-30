@@ -4,7 +4,7 @@ import { sendResponse } from '../../services/utils/response.js';
 
 export const handler = async () => {
     try {
-        const params = { TableName: 'ShuiNotesTable' };
+        const params = { TableName: 'ShuiNotesTable2' };
         const command = new ScanCommand(params);
         const data = await client.send(command);
 

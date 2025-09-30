@@ -19,10 +19,10 @@ export const handler = async (event) => {
         const createdAt = new Date().toISOString();
 
         const command = new PutItemCommand({
-            TableName: "ShuiNotesTable",
+            TableName: "ShuiNotesTable2",
             Item: {
                 pk: { S: note.username },
-                sk: { S: createdAt },
+                sk: { S: id },
                 id: { S: id },
                 username: { S: note.username },
                 text: { S: note.text },
