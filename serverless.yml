@@ -11,6 +11,8 @@ provider:
   region: eu-north-1
   iam:
     role: arn:aws:iam::533284742937:role/swing
+  httpApi:
+    cors: true
 
 build:
   esbuild:
