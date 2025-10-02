@@ -12,9 +12,9 @@ export default function EditNotePage() {
   useEffect(() => {
     async function fetchNote() {
       try {
-        const noteData = await getNoteById(id);
-        setUsername(noteData.username);
-        setText(noteData.text);
+        const res = await getNoteById(id);
+        setUsername(res.note?.username || '');
+        setText(res.note?.text || '');
       } catch (err) {
         setError('Failed to retrieve note');
       }
@@ -45,12 +45,21 @@ export default function EditNotePage() {
       <form onSubmit={handleSubmit}>
         <label>
           Användarnamn:
-          <input value={username} onChange={(e) => setUsername(e.target.value)} required />
+          <input 
+            value={username} 
+            onChange={(e) => setUsername(e.target.value)} 
+            required 
+          />
         </label>
         <br />
         <label>
           Text:
-          <textarea value={text} onChange={(e) => setText(e.target.value)} required rows={5} />
+          <textarea 
+            value={text} 
+            onChange={(e) => setText(e.target.value)} 
+            required 
+            rows={5} 
+          />
         </label>
         {error && <p style={{ color: 'red' }}>{error}</p>}
         <br />
