@@ -1,4 +1,4 @@
-import { getNotes } from "../../api/notesApi.js";
+import { getNotes, getUserNotes } from "../../api/notesApi.js";
 import { useState, useEffect } from "react";
 import './homePage.css';
 import { useNavigate } from "react-router-dom";
@@ -8,6 +8,7 @@ export function HomePage() {
     const [username, setUsername] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredNotes, setFilteredNotes] = useState([]);
+    const [currentUser, setCurrentUser] = useState('');
     const navigate = useNavigate();
 
     const goToPostNote = () => {
@@ -16,14 +17,23 @@ export function HomePage() {
 
     useEffect(() => {
         async function fetchData() {
-            const data = await getNotes();
-            setNotes(data.notes);
-            setFilteredNotes(data.notes);
-            setUsername(data.username);
-            console.log(data)
+            try {
+                let data;
+                if (currentUser) {
+                    data = await getUserNotes(currentUser);
+                    setUsername(currentUser);
+                } else {
+                    data = await getNotes();
+                    setUsername('');
+                }
+                setNotes(data.notes);
+                setFilteredNotes(data.notes);
+            } catch (error) {
+                console.error('Failed to fetch notes', error);
+            }
         }
         fetchData();
-    }, []);
+    }, [currentUser]);
 
     const handleSearchChange = (e) => {
         const value = e.target.value.toLowerCase();
@@ -46,11 +56,21 @@ export function HomePage() {
         }
     };
 
+    const handleUserFilterChange = (e) => {
+        setCurrentUser(e.target.value.trim());
+    };
+
     return (
         <div>
             <input
                 type="text"
-                placeholder="Search by date or username..."
+                placeholder="Search by username"
+                value={currentUser}
+                onChange={handleUserFilterChange}
+            />
+            <input
+                type="text"
+                placeholder="Search by date..."
                 value={searchTerm}
                 onChange={handleSearchChange}
             />
