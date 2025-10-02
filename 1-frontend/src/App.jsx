@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import HomePage from './pages/HomePage/HomePage.jsx';
 import PostNotePage from './pages/PostNotePage/PostNotePage.jsx';
+import EditNotePage from './pages/EditNotePage/EditNotePage.jsx';
 
 function Layout() {
   return (
@@ -18,7 +19,8 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { index: true, element: <HomePage /> }, 
-      { path: "postnote", element: <PostNotePage /> }, 
+      { path: "postnote", element: <PostNotePage /> },
+      { path: "editnote/:id", element: <EditNotePage /> },
     ],
   },
 ]);

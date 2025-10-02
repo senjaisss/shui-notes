@@ -26,7 +26,7 @@ export function HomePage() {
         <div>
             <ul>
                 {notes && notes.map((note) => (
-                    <li key={note.id} className="note-item">
+                    <li key={note.id} className="note-item" onClick={() => navigate(`/editnote/${note.id}`)}>
                         {new Date(note.createdAt).toLocaleDateString('sv-SE', {
                             day: 'numeric',
                             month: 'short',

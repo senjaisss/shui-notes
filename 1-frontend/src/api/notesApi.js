@@ -34,6 +34,16 @@ export const updateNote = async (username, id, updates) => {
     return res.json();
 }
 
+export const getNoteById = async (username, id) => {
+  const res = await fetch(`${BASE_URL}/notes/${username}/${id}`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  if (!res.ok) throw new Error('Could not fetch note by id');
+  return res.json();
+};
+
 export const deleteNotes = async (username, id) => {
     const res = await fetch(`${BASE_URL}/notes/${username}/${id}`, {
         method: 'DELETE',
