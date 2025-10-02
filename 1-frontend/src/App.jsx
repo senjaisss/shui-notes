@@ -1,20 +1,30 @@
-import { useEffect } from 'react';
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
+import HomePage from './pages/HomePage/HomePage.jsx';
+import PostNotePage from './pages/PostNotePage/PostNotePage.jsx';
+import EditNotePage from './pages/EditNotePage/EditNotePage.jsx';
 
-function App() {
-  useEffect(() => {
-    fetch('https://8g11mabu90.execute-api.eu-north-1.amazonaws.com/allnotes')
-      .then(res => res.json())
-      .then(data => console.log(data))
-      .catch(err => console.error(err));
-  }, []);
-
+function Layout() {
   return (
     <div>
-      <h1>Test av API-anrop</h1>
-      <p>Se konsolen för resultatet av fetch-anropet</p>
+      <main>
+        <Outlet /> 
+      </main>
     </div>
   );
 }
 
-export default App;
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      { index: true, element: <HomePage /> }, 
+      { path: "postnote", element: <PostNotePage /> },
+      { path: "editnote/:id", element: <EditNotePage /> },
+    ],
+  },
+]);
 
+export default function App() {
+  return <RouterProvider router={router} />;
+}
