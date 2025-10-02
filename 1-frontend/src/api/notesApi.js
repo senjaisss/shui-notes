@@ -34,8 +34,8 @@ export const updateNote = async (username, id, updates) => {
     return res.json();
 }
 
-export const getNoteById = async (username, id) => {
-  const res = await fetch(`${BASE_URL}/notes/${username}/${id}`, {
+export const getNoteById = async (id) => {
+  const res = await fetch(`${BASE_URL}/notes/userId/${id}`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
   });

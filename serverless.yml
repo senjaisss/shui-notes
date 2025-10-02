@@ -47,7 +47,7 @@ functions:
     handler: 2-backend/endpoints/getUserId/index.handler
     events:
       - httpApi:
-          path: /notes/{username}/{id}
+          path: /notes/userId/{id}
           method: get
 
   updateNotes:
@@ -75,9 +75,18 @@ resources:
             AttributeType: S # S står String som i datatyp
           - AttributeName: sk
             AttributeType: S
+          - AttributeName: id
+            AttributeType: S
         KeySchema:
           - AttributeName: pk
             KeyType: HASH # HASH = Partition key
           - AttributeName: sk
             KeyType: RANGE # RANGE = Sort key
         BillingMode: PAY_PER_REQUEST
+        GlobalSecondaryIndexes:
+          - IndexName: IdIndex
+            KeySchema:
+              - AttributeName: id
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
