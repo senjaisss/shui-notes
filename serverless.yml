@@ -42,6 +42,13 @@ functions:
       - httpApi:
           path: /notes/{username}
           method: get
+  
+  getUserId:
+    handler: 2-backend/endpoints/getUserId/index.handler
+    events:
+      - httpApi:
+          path: /notes/{username}/{id}
+          method: get
 
   updateNotes:
     handler: 2-backend/endpoints/updateNotes/index.handler
