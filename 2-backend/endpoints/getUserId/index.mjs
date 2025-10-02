@@ -1,36 +1,38 @@
-import { GetItemCommand } from "@aws-sdk/client-dynamodb";
+import { QueryCommand } from "@aws-sdk/client-dynamodb";
 import { client } from '../../services/utils/db.mjs';
 import { sendResponse } from '../../services/utils/response.js';
 
 export const handler = async (event) => {
     try {
-        const username = event.pathParameters?.username;
         const id = event.pathParameters?.id;
-        if (!username || !id) {
-            return sendResponse(400, { success: false, message: "Missing username or id" });
+        if (!id) {
+            return sendResponse(400, { success: false, message: "Missing id" });
         }
 
         const params = {
             TableName: "ShuiNotesTable2",
-            Key: {
-                pk: { S: username },
-                sk: { S: id },
+            IndexName: "IdIndex",
+            KeyConditionExpression: "id = :id",
+            ExpressionAttributeValues: {
+                ":id": { S: id }
             }
         };
 
-        const command = new GetItemCommand(params);
+        const command = new QueryCommand(params);
         const data = await client.send(command);
 
-        if (!data.Item) {
+        if (!data.Items || data.Items.length === 0) {
             return sendResponse(404, { success: false, message: "Note not found" });
         }
 
+        const item = data.Items[0];
+
         const note = {
-            id: data.Item.sk.S,
-            username: data.Item.pk.S,
-            text: data.Item.text?.S || '',
-            createdAt: data.Item.createdAt?.S || ''
-        };
+            id: item.id.S,
+            username: item.pk.S,
+            text: item.text?.S || '',
+            createdAt: item.createdAt?.S || ''
+        }
 
         return sendResponse(200, {
             success: true,
