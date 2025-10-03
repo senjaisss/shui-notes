@@ -11,6 +11,8 @@ provider:
   region: eu-north-1
   iam:
     role: arn:aws:iam::533284742937:role/swing
+  httpApi:
+    cors: true
 
 build:
   esbuild:
@@ -40,17 +42,74 @@ functions:
       - httpApi:
           path: /notes/{username}
           method: get
+  
+  getUserId:
+    handler: 2-backend/endpoints/getUserId/index.handler
+    events:
+      - httpApi:
+          path: /notes/userId/{id}
+          method: get
 
   updateNotes:
     handler: 2-backend/endpoints/updateNotes/index.handler
     events:
       - httpApi:
-          path: /notes/{id}
+          path: /notes/{username}/{id}
           method: put
-          
+
   deleteNotes:
     handler: 2-backend/endpoints/deleteNotes/index.handler
     events:
       - httpApi:
-          path: /delete/{id}
+          path: /notes/{username}/{id}
           method: delete
+
+resources:
+  Resources:
+    ShuiNotesTable2:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ShuiNotesTable2
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S # S står String som i datatyp
+          - AttributeName: sk
+            AttributeType: S
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH # HASH = Partition key
+          - AttributeName: sk
+            KeyType: RANGE # RANGE = Sort key
+        BillingMode: PAY_PER_REQUEST
+        GlobalSecondaryIndexes:
+          - IndexName: IdIndex
+            KeySchema:
+              - AttributeName: id
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+    SenShuiNotesHink:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: sen-shui-notes-hink
+        CorsConfiguration:
+          CorsRules:
+            - AllowedMethods:
+                - PUT
+                - GET
+                - POST
+                - HEAD
+              AllowedOrigins:
+                - http://localhost:3000
+              AllowedHeaders:
+                - "*"
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: true
+          BlockPublicPolicy: true
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: true
+        OwnershipControls:
+          Rules:
+            - ObjectOwnership: BucketOwnerEnforced
