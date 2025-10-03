@@ -2,6 +2,7 @@ import { getNotes, getUserNotes } from "../../api/notesApi.js";
 import { useState, useEffect } from "react";
 import './homePage.css';
 import { useNavigate } from "react-router-dom";
+import { FaPen } from 'react-icons/fa';
 
 export function HomePage() {
     const [notes, setNotes] = useState([]);
@@ -61,34 +62,41 @@ export function HomePage() {
     };
 
     return (
-        <div>
-            <input
-                type="text"
-                placeholder="Search by username"
-                value={currentUser}
-                onChange={handleUserFilterChange}
-            />
-            <input
-                type="text"
-                placeholder="Search by date..."
-                value={searchTerm}
-                onChange={handleSearchChange}
-            />
-            <ul>
+        <div className="homepage-container">
+            <header className="app-header">
+                <h1>SHUI notes</h1>
+            </header>
+            <div className="inputs">
+                <input
+                    type="text"
+                    placeholder="search by username..."
+                    value={currentUser}
+                    onChange={handleUserFilterChange}
+                />
+                <input
+                    type="text"
+                    placeholder="search by date..."
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                />
+            </div>
+            <ul className="notes-list">
                 {filteredNotes.map(note => (
-                    <li
-                        key={note.id}
-                        onClick={() => navigate(`/editnote/${note.id}`)}
-                    >
-                        {new Date(note.createdAt).toLocaleDateString('sv-SE', { day: 'numeric', month: 'short' }).replace('.', '')}
-                        {' '}
-                        {new Date(note.createdAt).toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' })}
-                        {' '}
-                        {note.username}: {note.text}
+                    <li key={note.id} className="note-item" onClick={() => navigate(`/editnote/${note.id}`)}>
+                        <div className="note-date">
+                            {new Date(note.createdAt).toLocaleDateString('sv-SE', { day: 'numeric', month: 'short' }).replace('.', '')}
+                            {' '}
+                            {new Date(note.createdAt).toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                        <div className="note-text">{note.text}</div>
+                        <div className="note-username">- {note.username}</div>
                     </li>
                 ))}
             </ul>
-            <button onClick={goToPostNote}>Write new note</button>
+            <button className="note-button" onClick={goToPostNote}>
+                <FaPen className="pen-icon" />
+                <span role="img" aria-label="pen"></span>
+            </button>
         </div>
     );
 }

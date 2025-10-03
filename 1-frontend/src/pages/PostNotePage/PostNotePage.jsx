@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { postNotes } from '../../api/notesApi.js';
+import './postNotePage.css';
 
 export function PostNotePage() {
   const [username, setUsername] = useState('');
@@ -29,35 +30,40 @@ export function PostNotePage() {
   };
 
   return (
-    <div>
-      <h1>Skapa ny note</h1>
-      <form onSubmit={handleSubmit}>
+    <>
+      <header className="app-header">
+        <h1>SHUI notes</h1>
+      </header>
+      <h1 className="title">write your new note:</h1>
+      <div className="postnote-container">
         <div>
-          <label>
-            Användarnamn: <br />
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </label>
+          <form className="postnote-form" onSubmit={handleSubmit}>
+            <label>
+              username: <br />
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+            </label>
+            <div>
+              <label>
+                note: <br />
+                <textarea
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                  rows={5}
+                  required
+                />
+              </label>
+            </div>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+            <button type="submit">post!</button>
+          </form>
         </div>
-        <div>
-          <label>
-            Text: <br />
-            <textarea
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              rows={5}
-              required
-            />
-          </label>
-        </div>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit">Publicera</button>
-      </form>
-    </div>
+      </div>
+    </>
   );
 }
 
