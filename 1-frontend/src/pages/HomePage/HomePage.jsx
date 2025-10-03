@@ -81,6 +81,9 @@ export function HomePage() {
                 />
             </div>
             <ul className="notes-list">
+                {notes.length === 0 && (
+                    <p className="nonotes-text">No notes here... add one!</p>
+                )}
                 {filteredNotes.map(note => (
                     <li key={note.id} className="note-item" onClick={() => navigate(`/editnote/${note.id}`)}>
                         <div className="note-date">
