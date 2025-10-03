@@ -90,3 +90,26 @@ resources:
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
+    SenShuiNotesHink:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: sen-shui-notes-hink
+        CorsConfiguration:
+          CorsRules:
+            - AllowedMethods:
+                - PUT
+                - GET
+                - POST
+                - HEAD
+              AllowedOrigins:
+                - http://localhost:3000
+              AllowedHeaders:
+                - "*"
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: true
+          BlockPublicPolicy: true
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: true
+        OwnershipControls:
+          Rules:
+            - ObjectOwnership: BucketOwnerEnforced
